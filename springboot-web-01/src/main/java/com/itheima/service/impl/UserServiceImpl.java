@@ -4,13 +4,17 @@ import com.itheima.dao.UserDao;
 import com.itheima.dao.impl.UserDaoImpl;
 import com.itheima.pojo.User;
 import com.itheima.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+@Component
 public class UserServiceImpl implements UserService {
-    private UserDao userDao=new UserDaoImpl();
+    @Autowired
+    private UserDao userDao;
     @Override
     public List<User> findAll() {
         List<String> lines = userDao.findAll();
