@@ -1,7 +1,9 @@
-package com.itheima.Controller;
+package com.itheima.controller;
 
 import cn.hutool.core.io.IoUtil;
 import com.itheima.pojo.User;
+import com.itheima.service.UserService;
+import com.itheima.service.impl.UserServiceImpl;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,12 +13,13 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 public class UserController {
+    private UserService userService = new UserServiceImpl();
     @RequestMapping("/list")
     public List<User> list(){
+        /*
         //1. 加载并读取user.txt文件，获取用户数据
         InputStream in = this.getClass().getClassLoader().getResourceAsStream("user.txt");//加载resource目录下的文件
         ArrayList<String> lines = IoUtil.readLines(in, StandardCharsets.UTF_8 , new ArrayList<>());//使用hutool工具类读取文件
@@ -35,5 +38,13 @@ public class UserController {
 
         //3. 返回数据（json）
         return userList;//RestController注解是Controller+ResponseBody的组合注解,ResponseBody注解自动将返回的数据进行json化
+        */
+
+//        1.调用service获取数据
+        List<User> userList = userService.findAll();
+
+        //3. 返回数据（json）
+        return userList;//RestController注解是Controller+ResponseBody的组合注解,ResponseBody注解自动将返回的数据进行json化
+
     }
 }
