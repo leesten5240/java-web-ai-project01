@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/user")
 public class UserController {
+    @RequestMapping("/list")
     public List<User> list(){
         //1. 加载并读取user.txt文件，获取用户数据
         InputStream in = this.getClass().getClassLoader().getResourceAsStream("user.txt");//加载resource目录下的文件
