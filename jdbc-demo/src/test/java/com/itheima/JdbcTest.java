@@ -1,11 +1,9 @@
 package com.itheima;
 
+import com.itheima.pojo.User;
 import org.junit.jupiter.api.Test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class JdbcTest {
     @Test
@@ -27,5 +25,46 @@ public class JdbcTest {
         //5.释放资源
         statement.close();
         connection.close();
+    }
+
+    @Test
+    public void testQuery(){
+        String url="jdbc:mysql://localhost:3306/web01";
+        String username="root";
+        String password=System.getenv("MYSQL_PWD");
+
+        Connection connection = null;
+        PreparedStatement statement =  null;
+        ResultSet resultSet = null;
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(url,username,password);
+            String sql = "select id, username, password, name, age from user where username = ? and password = ?";
+            statement = connection.prepareStatement(sql);
+            statement.setString(1,"daqiao");
+            statement.setString(2,"123456");
+            resultSet = statement.executeQuery();
+            while (resultSet.next()){
+                User user = new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getString("name"),
+                        resultSet.getInt("age")
+                );
+                System.out.println(user);//Lombok 注解自动生成toString()方法
+            }
+        } catch (ClassNotFoundException | SQLException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if(resultSet != null) resultSet.close();
+                if(statement != null) statement.close();
+                if(connection != null) connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }
